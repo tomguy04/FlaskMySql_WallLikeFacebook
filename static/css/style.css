@@ -1,0 +1,21 @@
+*{
+    margin:0px;
+    padding:0px;
+}
+
+#wrapper{
+    width: 1000px;
+    margin: 0px auto;
+}
+
+#flashErrorMessages{
+    background-color: yellow;
+    color: red;
+}
+
+
+#flashNoErrorMessages{
+    background-color: white;
+}
+
+
