@@ -106,8 +106,8 @@ def dashboard():
     #THIS IS A GIANT BLOB OF MESSAGE DATA AND COMMENT DATA, BUT NO COMMENT USER NAMES.    
     #query= mysql.query_db("select tblusers.first_name, tblmessages.message, tblmessages.user_id, tblmessages.id, tblmessages.created_at, tblmessages.updated_at, tblcomments.message_id, tblcomments.user_id, tblcomments.comment, tblcomments.created_at, tblcomments.updated_at from tblmessages join tblusers on tblmessages.user_id = tblusers.id left join tblcomments on tblmessages.id = tblcomments.message_id;")
 
-    messageQuery= mysql.query_db("select tblusers.first_name, tblmessages.message, tblmessages.created_at, tblmessages.id from tblmessages join tblusers on tblmessages.user_id = tblusers.id")
-    commentQuery=mysql.query_db("select tblcomments.comment, tblcomments.created_at, tblusers.first_name, tblcomments.message_id from tblcomments left join tblusers on tblcomments.user_id = tblusers.id")
+    messageQuery= mysql.query_db("select tblusers.first_name,tblusers.last_name, tblmessages.message, tblmessages.created_at, tblmessages.id from tblmessages join tblusers on tblmessages.user_id = tblusers.id order by created_at desc")
+    commentQuery=mysql.query_db("select tblcomments.comment, tblcomments.created_at, tblusers.first_name, tblusers.last_name, tblcomments.message_id from tblcomments left join tblusers on tblcomments.user_id = tblusers.id order by tblcomments.created_at")
     query2 = "SELECT * FROM tblusers WHERE id = :user_id" #being able to show this dashboard means there is an active session, someone is logged in.
     data = {
             "user_id":session["uid"]
@@ -135,7 +135,7 @@ def login():
 		if user["password"] ==  md5.new(request.form['password']).hexdigest():
 			session["uid"] = user["id"]
 			return redirect("/wall")
-	flash("Email and password not found")
+	flash(u"Email and password not found",'flashErrorMessages')
 	return redirect("/")
 
 

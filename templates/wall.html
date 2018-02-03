@@ -10,9 +10,12 @@
     <title>It's FelineBook!</title>
 <html>
 <body>
-	<h1>Wall</h1>
-	<h1>Welcome {{user.first_name}}</h1>
-	
+    <div id='header'>
+        Wall
+        Welcome {{user.first_name}}
+        <a href="/logout">Logout</a>
+    </div>
+
 	<div id="wrapper">
             <div>
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -23,42 +26,53 @@
                  {% endif %}
                 {% endwith %}
             </div>
-            --Create Message--
-            <form action='/insertMessage' method='post'>
-                <div id='fields'>
-                    <p>Message:</p>
-                </div>
-                <div class='values'>
-                    <p><input type='text' name='messagecontent'></p>
-                </div>
-                <input type='submit' value='Submit'>
-            </form>
-            <table>
+            <!-- Create Message -->
+            <div id = 'message'>
+                <form action='/insertMessage' method='post'>
+                        <p>Post a Message:</p>
+                        <input type='text' name='messagecontent'/>
+                        <input type='submit' value='Submit'/>
+                </form>
+            </div>
+            
 			{% for message in messages: %}
-            <tr>
-              <td>{{message['first_name']}}'s message -> </td>
-              <td>{{message['message']}}</td>
-              <td> dated -> {{message['created_at']}}</td>
+            <div id = 'messageblock'>
+                <div id = 'messageuser'>
+                    {{message['first_name']}} {{message['last_name']}} - {{message['created_at'].strftime("%B %d %Y")}} 
+                </div>
+                <div id = 'messagecontent'>
+                    {{message['message']}}
+                </div>  
+            </div>
+
+            
               {% for comment in comments: %}
                 {% if comment['message_id'] == message['id'] %}
-                    <td>{{comment['comment']}}</td>
-                    <td>{{comment['first_name']}}</td>
-                    <td>{{comment['created_at']}}</td>
+                <div id = 'commentblock'>
+                    <div id = 'commentuser'>
+                        {{comment['first_name']}} {{comment['last_name']}} - {{comment['created_at'].strftime("%B %d %Y")}}
+                    </div>
+                    <div id = 'commentcontent'>
+                        {{comment['comment']}}
+                    </div>
+                </div>
                 {% endif %}
               {% endfor %} 
-              <td>
-                  <form action='/insertComment' method='post'>
-                        Comment
-                        <input type='text' name='commentcontent'>
-                        <input type="hidden" name="messageid" value = "{{message['id']}}">
-                        <input type='submit' value='Submit'>
-                    </form>
-              </td>
-            </tr>
+            
+              <!--Create Comment-->
+            <div id = 'comment'>
+                <form action='/insertComment' method='post'>
+                    <p>Post a Comment:</p>
+                    <input type='text' name='commentcontent'>
+                    <input type="hidden" name="messageid" value = "{{message['id']}}">
+                    <input type='submit' value='Submit'>
+                </form>
+            </div>
+            
             {% endfor %}
-            </table>
-        </div>	
+            
+    </div>	
 
-	<a href="/logout">Logout</a>
+	
 </body>
 </html>
